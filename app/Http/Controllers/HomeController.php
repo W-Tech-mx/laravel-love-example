@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\CategoryPosts;
+use App\Post;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +28,23 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $new = Post::latest()->get();
+        $new2 = Post::latest()->get();
+
+        $posts = Post::all();
+
+        $posts2 = Post::all();
+
+        $category = CategoryPosts::all();
+
+        $users = User::latest()->get();
+
+        $post= [];
+
+        foreach($category as $category) {
+            $post[ Str::slug( $category->name ) ][] = Post::where('post_id', $category->id )->take(3)->get();
+        }
+
+        return view('home', compact('new','new2' ,'post','users','posts','posts2'));
     }
 }

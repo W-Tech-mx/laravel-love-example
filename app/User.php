@@ -18,9 +18,22 @@ class User extends Authenticatable implements LikerContrat
     protected $hidden = [
         'password', 'remember_token',
     ];
+        protected static function boot()
+    {
+        parent::boot();
 
-    public function posts()
+        static::created(function ($user) {
+            $user->Profile()->create();
+        });
+    }
+
+    public function Post()
     {
         return $this->hasMany(Post::class);
     }
+    public function Profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
 }
